@@ -1,3 +1,4 @@
+from pathlib import Path
 from typing import List
 
 from fastapi import FastAPI
@@ -6,13 +7,14 @@ from fastapi.staticfiles import StaticFiles
 
 from services.sudoku_service import generate_sudoku_problem, solve_sudoku
 
+path = Path(__name__).parent
 app = FastAPI()
-app.mount("/static", StaticFiles(directory="templates"), name="static")
+app.mount("/static", StaticFiles(directory=f"{path}/templates"), name="static")
 
 
 @app.get("/", response_class=HTMLResponse)
 async def root():
-    with open("templates/index.html") as file:
+    with open(f"{path}/templates/index.html") as file:
         return HTMLResponse(content=file.read(), status_code=200)
 
 
